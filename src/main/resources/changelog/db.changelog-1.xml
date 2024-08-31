@@ -1,0 +1,22 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="nidhin" id="create-post">
+        <createTable tableName="olympics">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="olympics_pkey"/>
+            </column>
+            <column name="sport" type="VARCHAR(150)"/>
+            <column name="venue" type="VARCHAR(100)"/>
+        </createTable>
+        <createTable tableName="participant">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="participant_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(150)"/>
+            <column name="age" type="INTEGER"/>
+            <column name="sex" type="VARCHAR(6)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

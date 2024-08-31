@@ -1,0 +1,57 @@
+openapi: 3.0.1
+info:
+  title: Demo api
+  description: Demo API
+  version: v0.1
+servers:
+  - url: http://localhost:8080
+    description: local dev environment
+paths:
+  /demo:
+    get:
+      tags:
+        - demo
+      summary: Test Api
+      operationId: test
+      responses:
+        200:
+          description: OK
+          content:
+            { }
+        401:
+          $ref: 'common-model.yml#/components/responses/401-Unauthorized'
+        403:
+          $ref: 'common-model.yml#/components/responses/403-Forbidden'
+        404:
+          $ref: 'common-model.yml#/components/responses/404-NotFound'
+
+components:
+  schemas:
+    Olympic:
+      title: Olympics
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        sport:
+          type: string
+        venue:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Participant'
+    Participant:
+      title: Olympics
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        age:
+          type: integer
+        sex:
+          type: string

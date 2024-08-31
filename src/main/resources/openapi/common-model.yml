@@ -1,0 +1,205 @@
+openapi: 3.0.1
+info:
+  title: Common Model
+  description: Common model
+  version: v1.0
+paths: { }
+components:
+  parameters:
+    pathId:
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+      example: 123e4567-e89b-12d3-a456-426652340000
+    queryPage:
+      in: query
+      description: |
+        Page number of the requested page. Defaults to first page.
+      name: page
+      schema:
+        type: integer
+        format: int32
+        default: 0
+        minimum: 0
+        example: 0
+    querySize:
+      in: query
+      description: |
+        Size of a page. Defaults to 100 items.
+      name: size
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 200
+        default: 100
+        example: 100
+    querySort:
+      in: query
+      name: sort
+      description: |
+        Sorting criteria in the form of `<property-name>`.
+        For multiple sort values, use multiple `sort` request parameters.
+        Using multiple sort values in one request parameter will not work.
+      explode: true
+      style: form
+      schema:
+        type: array
+        items:
+          type: string
+      examples:
+        single:
+          value: [ 'createdTimestamp,desc' ]
+          summary: Singular sort
+        multi:
+          value: [ 'airlineDesignator,asc','createdTimestamp,desc' ]
+          summary: Multi sort
+
+  responses:
+    200-OK:
+      description: OK
+    201-Created:
+      description: Created
+    202-Accepted:
+      description: Accepted
+    204-NoContent:
+      description: No Content
+    400-BadRequest:
+      description: Bad Request, does not comply with schema as defined in the OAS
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    401-Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    403-Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    404-NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    405-Method-Not-Allowed:
+      description: Method Not Allowed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    409-Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ClientError'
+    418-Joris-Is-A-Teapot:
+      description: Joris is a Teapot
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    422-Unprocessable-Entity:
+      description: Validation on entity failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ClientError'
+    424-Failed-Dependency:
+      description: Dependency failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ClientError'
+
+  schemas:
+    ClientError:
+      title: ClientError
+      oneOf:
+        - $ref: '#/components/schemas/ErrorMessage'
+        - $ref: '#/components/schemas/ErrorMessages'
+        - $ref: '#/components/schemas/FieldError'
+        - $ref: '#/components/schemas/FieldErrors'
+
+    ErrorMessage:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+    ErrorMessages:
+      title: ErrorMessages container
+      type: array
+      items:
+        $ref: '#/components/schemas/ErrorMessage'
+
+    FieldErrors:
+      title: FieldErrors container
+      type: array
+      items:
+        $ref: '#/components/schemas/FieldError'
+
+    FieldError:
+      title: Field Error
+      type: object
+      required:
+        - field
+        - error
+      properties:
+        field:
+          type: string
+          description: JSON-path to the field or object for which a validation error occured
+        error:
+          type: string
+          description: Human-readable error
+
+    Page:
+      type: object
+      title: Page
+      required:
+        - pageNumber
+        - pageSize
+        - totalElements
+        - totalPages
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+          description: Current page of search result
+          default: 0
+        pageSize:
+          type: integer
+          format: int32
+          description: Current desired amount of items per result page.
+          default: 100
+        totalElements:
+          type: integer
+          format: int64
+          description: Total amount of items meeting the search criteria.
+          default: 0
+        totalPages:
+          type: integer
+          format: int32
+          description: Total amount of available pages compared to the given pageSize.
+          default: 0
+        first:
+          type: boolean
+          description: Indicates if this is the first page.
+          default: false
+        last:
+          type: boolean
+          description: Indicates if this is the last page.
+          default: false
