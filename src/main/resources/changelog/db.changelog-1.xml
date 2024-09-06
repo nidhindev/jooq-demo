@@ -17,6 +17,20 @@
             <column name="name" type="VARCHAR(150)"/>
             <column name="age" type="INTEGER"/>
             <column name="sex" type="VARCHAR(6)"/>
+            <column name="olympics_id" type="UUID"/>
         </createTable>
+
+
+        <addForeignKeyConstraint
+                baseColumnNames="olympics_id"
+                baseTableName="participant"
+                constraintName="fk_participant__olympics_id"
+                referencedColumnNames="id"
+                referencedTableName="olympics"
+                onDelete="CASCADE"/>
+
+        <createIndex indexName="fk_participant__olympics_id" tableName="participant">
+            <column name="olympics_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

@@ -7,27 +7,27 @@ servers:
   - url: http://localhost:8080
     description: local dev environment
 paths:
-  /demo:
-    get:
-      tags:
-        - demo
-      summary: Test Api
-      operationId: test
+  /demo/jpa/create:
+    post:
+      summary: APi for olympics
+      operationId: olympics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Olympics'
       responses:
-        200:
-          description: OK
-          content:
-            { }
+        201:
+          $ref: 'common-model.yml#/components/responses/201-Created'
         401:
           $ref: 'common-model.yml#/components/responses/401-Unauthorized'
         403:
           $ref: 'common-model.yml#/components/responses/403-Forbidden'
         404:
           $ref: 'common-model.yml#/components/responses/404-NotFound'
-
 components:
   schemas:
-    Olympic:
+    Olympics:
       title: Olympics
       type: object
       properties:
@@ -43,7 +43,7 @@ components:
           items:
             $ref: '#/components/schemas/Participant'
     Participant:
-      title: Olympics
+      title: Participant
       type: object
       properties:
         id:
